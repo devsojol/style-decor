@@ -1,2 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 @import "tailwindcss";
 @plugin "daisyui";
+
+body {
+  box-sizing: border-box;
+  max-width: 1600px;
+  margin: 0 auto;
+  font-family: "Open Sans", sans-serif;
+}
+
+.active {
+  color: #00c6ff;
+  font-weight: bold;
+}
+
+.text-gradient {
+  background: linear-gradient(
+    to right,
+    rgb(0, 112, 255),
+    rgb(0, 168, 255),
+    rgb(102, 204, 255)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
