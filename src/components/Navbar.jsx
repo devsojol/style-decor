@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { Link, NavLink } from "react-router";
+import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const { user, logoutUser } = useContext(AuthContext);
+
   const navLinks = (
     <>
-      <li className="">
+      <li>
         <NavLink to="/">Home</NavLink>
       </li>
       <li>
@@ -17,14 +19,17 @@ const Navbar = () => {
       <li>
         <NavLink to="/contact">Contact</NavLink>
       </li>
-      <li>
-        <NavLink to="/register">Register</NavLink>
-      </li>
+      {!user && (
+        <li>
+          <NavLink to="/register">Login</NavLink>
+        </li>
+      )}
     </>
   );
 
   return (
-    <div className="navbar bg-base-100 shadow-sm">
+    <div className="navbar bg-base-100 shadow-sm px-6">
+      {/* Navbar Start */}
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -35,13 +40,12 @@ const Navbar = () => {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              {" "}
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
                 d="M4 6h16M4 12h8m-8 6h16"
-              />{" "}
+              />
             </svg>
           </div>
           <ul
@@ -60,16 +64,18 @@ const Navbar = () => {
         </NavLink>
       </div>
 
+      {/* Navbar Center */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 font-semibold">{navLinks}</ul>
       </div>
 
+      {/* Navbar End */}
       <div className="dropdown dropdown-end navbar-end">
-        {isLoggedIn ? (
+        {user ? (
           <div className="dropdown dropdown-end">
             <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
-                <img src="https://i.pravatar.cc/100" alt="user" />
+                <img src={user.photoURL} alt={user.displayName || "user"} />
               </div>
             </div>
             <ul
@@ -80,14 +86,14 @@ const Navbar = () => {
                 <Link to="/dashboard">Dashboard</Link>
               </li>
               <li>
-                <button onClick={() => setIsLoggedIn(false)}>Logout</button>
+                <button onClick={logoutUser}>Logout</button>
               </li>
             </ul>
           </div>
         ) : (
           <Link
             to="/login"
-            className="btn btn-primary text-white font-semibold"
+            className="btn bg-gradient-to-r from-[#0070FF] via-[#00A8FF] to-[#66CCFF] text-white font-semibold"
           >
             Login
           </Link>

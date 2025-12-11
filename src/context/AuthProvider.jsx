@@ -18,9 +18,18 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const registerUser = (email, password) => {
+  const registerUser = (email, password, displayName, photoURL) => {
     setLoading(true);
-    return createUserWithEmailAndPassword(auth, email, password);
+    return createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const currentUser = userCredential.user;
+        return updateProfile(currentUser, { displayName, photoURL }).then(
+          () => {
+            setUser(auth.currentUser);
+          }
+        );
+      })
+      .finally(() => setLoading(false));
   };
 
   const loginUser = (email, password) => {
@@ -28,9 +37,22 @@ const AuthProvider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  const googleLogin = () => {
+  const googleLogin = async () => {
     setLoading(true);
-    return signInWithPopup(auth, googleProvider);
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const loggedUser = result.user;
+      setUser({
+        uid: loggedUser.uid,
+        displayName: loggedUser.displayName,
+        email: loggedUser.email,
+        photoURL: loggedUser.photoURL || "",
+      });
+
+      return loggedUser;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const updateUserProfile = (name, photo) => {

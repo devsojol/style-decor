@@ -1,10 +1,11 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const Register = () => {
-  const { registerUser, updateUserProfile } = useContext(AuthContext);
+  const { registerUser } = useContext(AuthContext);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const imageBBKey = import.meta.env.VITE_ImageBB_Key;
 
@@ -17,31 +18,31 @@ const Register = () => {
 
     setError("");
 
-    const formData = new FormData();
-    formData.append("image", imageFile);
+    try {
+      const formData = new FormData();
+      formData.append("image", imageFile);
 
-    const res = await fetch(
-      `https://api.imgbb.com/1/upload?key=${imageBBKey}`,
-      {
-        method: "POST",
-        body: formData,
+      const res = await fetch(
+        `https://api.imgbb.com/1/upload?key=${imageBBKey}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const imgData = await res.json();
+
+      if (!imgData.success) {
+        setError("Image upload failed!");
+        return;
       }
-    );
 
-    const imgData = await res.json();
+      const photoURL = imgData.data.url;
+      await registerUser(email, password, name, photoURL);
 
-    if (!imgData.success) {
-      setError("Image upload failed!");
-      return;
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
     }
-
-    const photoURL = imgData.data.url;
-
-    registerUser(email, password)
-      .then(() => {
-        return updateUserProfile(name, photoURL);
-      })
-      .catch((err) => setError(err.message));
   };
 
   return (
