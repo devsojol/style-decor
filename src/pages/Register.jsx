@@ -47,7 +47,9 @@ const Register = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4 scroll-py-1.5 my-5">
       <div className="bg-white shadow-lg p-8 rounded-2xl w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
+        <h2 className="text-2xl font-bold text-center mb-6 text-gradient">
+          Create Your Account
+        </h2>
 
         <form onSubmit={handleRegister}>
           <div className="form-control w-full">
