@@ -23,7 +23,7 @@ const slides = [
     title: "StyleDecor Crafting Comfort",
     paragraph:
       "Innovative furniture and décor solutions tailored for modern lifestyles.",
-    button: "Shop Now",
+    button: "Book Decoration Service",
   },
   {
     img: banner3,
